@@ -1,0 +1,228 @@
+{% load static %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link type="text/css" rel="stylesheet" href="{% static 'css/base.css' %}">
+<title>This is chapar website</title>
+<style>
+    body {
+        transition: 0.5s;
+    }
+
+    .topnav {
+        background-color: #333;
+        overflow: hidden;
+        font-family: IRANSans;
+    }
+
+    .main-item {
+        float: right;
+        color: #f2f2f2;
+        text-align: center;
+        padding: 14px 16px;
+        text-decoration: none;
+        font-size: 17px;
+        font-family: IRANSans;
+    }
+
+    #searchButton {
+        float: right;
+        margin: 10px 1px 10px 10px;
+        width: 7%;
+
+    }
+
+    #searchTextbox {
+        float: right;
+        margin: 14px 10px 10px 4px;
+        width: 25%;
+    }
+
+    /* start to style full navbar */
+    /* The Overlay (background) */
+    .overlay {
+        /* Height & width depends on how you want to reveal the overlay (see JS below) */
+        height: 100%;
+        width: 0;
+        position: fixed;
+        /* Stay in place */
+        z-index: 1;
+        /* Sit on top */
+        right: 0;
+        top: 0;
+        background-color: rgb(0, 0, 0);
+        /* Black fallback color */
+        background-color: rgba(0, 0, 0, 0.9);
+        /* Black w/opacity */
+        overflow-x: hidden;
+        /* Disable horizontal scroll */
+        transition: 0.5s;
+        /* 0.5 second transition effect to slide in or slide down the overlay (height or width, depending on reveal) */
+    }
+
+    /* Position the content inside the overlay */
+    .overlay-content {
+        position: relative;
+        top: 25%;
+        /* 25% from the top */
+        width: 100%;
+        /* 100% width */
+        text-align: center;
+        /* Centered text/links */
+        margin-top: 30px;
+        /* 30px top margin to avoid conflict with the close button on smaller screens */
+    }
+
+    /* The navigation links inside the overlay */
+    .overlay a {
+        padding: 8px;
+        text-decoration: none;
+        font-size: 20px;
+        color: #818181;
+        display: block;
+        /* Display block instead of inline */
+        transition: 0.3s;
+        /* Transition effects on hover (color) */
+    }
+
+    /* When you mouse over the navigation links, change their color */
+    .overlay a:hover,
+    .overlay a:focus {
+        color: #f1f1f1;
+    }
+
+    /* Position the close button (top right corner) */
+    .overlay .closebtn {
+        position: absolute;
+        top: 20px;
+        right: 45px;
+        font-size: 60px;
+    }
+
+    .column {
+        float: right;
+        margin-right: 3%;
+        text-align: right;
+    }
+
+    /* When the height of the screen is less than 450 pixels, change the font-size of the links and position the close button again, so they don't overlap */
+    @media screen and (max-height: 450px) {
+        .overlay a {
+            font-size: 20px
+        }
+
+        .overlay .closebtn {
+            font-size: 40px;
+            top: 15px;
+            right: 35px;
+        }
+    }
+
+
+    /* end of style full navbar */
+</style>
+
+<body>
+    <div class="topnav" id="topNavbar">
+
+        <a href="#" class="main-item" onclick="showDropdwonMenu('baseinfo')">اطلاعات پایه</a>
+        <div id="baseinfo" class="overlay">
+            <a href="javascript:void(0)" class="closebtn" onclick=" closeNav('baseinfo')">&times;</a>
+            <div class="overlay-content">
+                <div class="column">
+                    <a href="{% url 'home' %}">اطلاعات کارفرماها</a>
+                    <a href="{% url 'incomes' %}">لیست درآمدها</a>
+                    <a href="{% url 'home' %}">لیست وضعیت های شغلی</a>
+                    <a href="{% url 'home' %}">لیست وضعیت تاهل</a>
+                    <a href="{% url 'home' %}">لیست شهرها</a>
+                    <a href="{% url 'home' %}">جدول وضعیت نظام وظیفه</a>
+                    <a href="{% url 'home' %}">لیست بانک ها</a>
+
+                </div>
+                <div class="column">
+                    <a href="{% url 'home' %}">ثابتها</a>
+                    <a href="{% url 'home' %}">اطلاعات کارکنان</a>
+                    <a href="{% url 'home' %}">لیست گروه های شغلی</a>
+                    <a href="{% url 'home' %}">لیست محل های کاری</a>
+                    <a href="{% url 'home' %}">لیست پست ها</a>
+                </div>
+            </div>
+        </div>
+
+        <a href="#" class="main-item" onclick="showDropdwonMenu('wageNav')">حقوق ودستمزد</a>
+        <div id="wageNav" class="overlay">
+            <a href="javascript:void(0)" class="closebtn" onclick=" closeNav('wageNav')">&times;</a>
+            <div class="overlay-content">
+                <a href="{% url 'home' %}">مشاهده لیست های حقوق</a>
+                <a href="{% url 'home' %}">لیست وام و مساعده</a>
+                <a href="#">ایجاد فایل پرداخت</a>
+                <a href="#">چاپ فیش ماهیانه</a>
+                <a href="#">چاپ لیست مالیات</a>
+            </div>
+        </div>
+
+        <a href="#" class="main-item" onclick="showDropdwonMenu('attendNav')">حضور وغیاب</a>
+        <div id="attendNav" class="overlay">
+            <a href="javascript:void(0)" class="closebtn" onclick=" closeNav('attendNav')">&times;</a>
+            <div class="overlay-content">
+                <a href="#">لیست حضور وغیاب ماه جاری</a>
+                <a href="#">ایجاد حضور وغیاب</a>
+                <a href="#">آنالیز حضور و غیاب</a>
+                <a href="#">چاپ حضور و غیاب ماه جاری</a>
+                <a href="#">ایجاد فایل حضور و غیاب</a>
+                <a href="#">ورود اطلاعات حضور و غیاب</a>
+            </div>
+        </div>
+
+        <a href="#" class="main-item" onclick="showDropdwonMenu('reportNav')">گزارشات</a>
+        <div id="reportNav" class="overlay">
+            <a href="javascript:void(0)" class="closebtn" onclick=" closeNav('reportNav')">&times;</a>
+            <div class="overlay-content">
+                <a href="#">لیست حضور وغیاب ماه جاری</a>
+                <a href="#">ایجاد حضور وغیاب</a>
+                <a href="#">آنالیز حضور و غیاب</a>
+                <a href="#">چاپ حضور و غیاب ماه جاری</a>
+                <a href="#">ایجاد فایل حضور و غیاب</a>
+                <a href="#">ورود اطلاعات حضور و غیاب</a>
+            </div>
+        </div>
+        <input type="text" id="searchTextbox" name='search_value' placeholder="متن مورد نظر را وارد کنید...">
+        <a href=# class='main-item'><i class="fa fa-fw fa-search"></i>جستجو</a>
+
+        <a href="#" class="main-item" style="float:left;">+ ورود</a>
+
+    </div>
+
+
+
+    <script>
+
+        var opened_menu = '';
+
+        function showDropdwonMenu(menuName) {
+            if (opened_menu!=''){
+                closeNav(opened_menu)
+            }
+            document.getElementById(menuName).style.width = "20%";
+            opened_menu = menuName;
+            document.body.style.marginRight = "20%"
+
+        }
+
+        function closeNav(naveName) {
+            document.getElementById(naveName).style.width = "0";
+            document.body.style.marginRight = "0"
+        }
+
+
+        document.addEventListener('click',(evt)=>{
+            if(evt.target==document.body){
+                closeNav(opened_menu);
+            }
+        })
+
+
+
+
+
+
+
+    </script>

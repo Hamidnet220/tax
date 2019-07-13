@@ -15,7 +15,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from django.views.generic import TemplateView
+from income.views import home_view,get_incomes_view,add_income_view
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('',home_view.as_view(),name='home'),
+    path('/incomes/',get_incomes_view,name='incomes'),
+    path('/income/add',add_income_view,name='add_income')
+
 ]
