@@ -16,12 +16,14 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from django.views.generic import TemplateView
-from income.views import home_view,get_incomes_view,add_income_view
+from income.views import *
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('',home_view.as_view(),name='home'),
-    path('/incomes/',get_incomes_view,name='incomes'),
-    path('/income/add',add_income_view,name='add_income')
+    path('employeers/',get_employeers_view,name="employeers"),
+    path('employeers/add',AddEmployeerView.as_view(),name="add_employeer"),
+    path('incomes/',get_incomes_view,name='incomes'),
+    path('incomes/add/',AddIncomeView.as_view(),name='add_income'),
 
 ]
