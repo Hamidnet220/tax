@@ -31,7 +31,7 @@ class AddEmployeerView(FormView):
 
 class AddIncomeView(FormView):
     template_name   =   'input_form.html'
-    form_class      =   AddIncomeForm
+    form_class      =   IncomeForm
     success_url     =   reverse_lazy('incomes')
 
     def form_valid(self, form):
