@@ -1,7 +1,8 @@
 class ViewGenerator():
     
-    def __init__(self,table,opration_buttons={},select_checkbox=False,add_url='',ordering=()):
+    def __init__(self,table,entities=None,opration_buttons={},select_checkbox=False,add_url='',ordering=()):
         self.table=table
+        self.entites=entities
         self.add_url=add_url
         self.select_checkbox=select_checkbox
         self.opration_buttons=opration_buttons
@@ -25,10 +26,13 @@ class ViewGenerator():
 
     # create context for html template
     def get_context_template(self,id=''):
-        if id!="":
-            objects=self.table.objects.all().filter(id=id).order_by(*(self.ordering))
+        if self.entites is None:
+            if id!="":
+                objects=self.table.objects.all().filter(id=id).order_by(*(self.ordering))
+            else:
+                objects=self.table.objects.all().filter().order_by(*(self.ordering))
         else:
-            objects=self.table.objects.all().filter().order_by(*(self.ordering))
+            objects=self.entites
 
         context={
         'objects':objects,
@@ -41,3 +45,6 @@ class ViewGenerator():
         }
 
         return context
+
+
+   
