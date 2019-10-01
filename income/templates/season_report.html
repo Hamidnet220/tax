@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <link rel="stylesheet" href="js-persian-cal.css">
+    <style>
+        #input-form {
+            margin: 25px;
+            padding: 25px;
+            width: 90%;
+            background-color: rgba(45, 103, 179, 0.9);
+            border-radius: 15px 5px 15px 5px;
+        }
+
+        form input {
+            width: 100%;
+
+        }
+
+        label::after {
+            content: '';
+            display: block;
+        }
+
+        label {
+            color: aliceblue;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    {% include "navbar.html" %}
+    {% load getattribute %}
+    {% load l10n %}
+    <div id='form'>
+        <form method="POST" action=".">
+            {% csrf_token %}
+            {{form}}
+
+            <button type="submit">تایید</button>
+        </form>
+    </div>
+
+    <div id='data-list'>
+        <table>
+            <tr>
+                <!-- if select checkbox is tru you will seel check box in the first of all rows-->
+                {% if select_checkbox %}
+                <th><input type="checkbox">همه</th>
+                {% endif %}
+
+                {% for title in titles %}
+                <th>
+                    {{title}}
+                </th>
+                {% endfor %}
+
+                <!-- if opration button is true the you will see opration button in last col -->
+                {% if opration_buttons %}
+                <th>عملیات</th>
+                {% endif %}
+
+            </tr>
+            <!-- check if exist any object -->
+            {% if objects %}
+            <!-- loop through objects for display in html file -->
+            {% for object in objects %}
+            <tr>
+                <!-- if opration button is true the you will see opration button in last col -->
+                {% if select_checkbox %}
+                <td><input type="checkbox"></td>
+                {% endif %}
+                <td>{{forloop.counter}}</td>
+
+                {% for field in field_names %}
+                {% if field == "year" %}
+                <!--check if field is year the disable separator for it-->
+                {% localize off %}
+                <td>{{ object|getattribute:field }}</td>
+                {% endlocalize %}
+                {% else %}
+                <td>{{ object|getattribute:field }}</td>
+                {% endif %}
+                {% endfor %}
+
+                <!-- if opration button is true the you will see opration button in last col -->
+                {% if opration_buttons %}
+                <td>
+                    {% for key,values in opration_buttons.items %}
+                    <a class='opration_btn' href="{% url values.1 id=object.id %}" name={{object.id}}
+                        onclick={{key}}>{{values.0}}</a>
+                    {% endfor %}
+                </td>
+                {% endif %}
+
+            </tr>
+            {% endfor %}
+            {% endif %}
+        </table>
+    </div>
+</body>
+
+</html>
