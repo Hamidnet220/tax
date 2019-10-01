@@ -19,3 +19,7 @@ class IncomeForm(forms.ModelForm):
 
     def update_record(self,id):
         Income.objects.filter(id=id).update(**self.cleaned_data)
+
+class SeasonReport(forms.Form):
+    seasons=[(1,'بهار'),(2,'تابستان'),(3,'‍پاییز'),(4,'زمستان')]
+    season=forms.ChoiceField(choices=seasons)
