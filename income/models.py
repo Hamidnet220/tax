@@ -1,8 +1,17 @@
 from django.db import models
+class City(models.Model):
+    name            =   models.CharField('نام شهر', max_length=50)
+
+    def __str__(self):
+        return self.name
 
 class Employeer(models.Model):
     title           =   models.CharField('نام کارفرما',max_length=50)
     national_code   =   models.CharField('شناسه ملی',max_length=11)
+    economic_id     =   models.CharField('شماره اقتصادی',max_length=11)
+    phone_number    =   models.CharField("شماره تلفن",max_length=11)
+    city_name       =   models.ForeignKey(City,verbose_name="شهر",null=True,on_delete=models.SET_NULL)
+    address         =   models.TextField(verbose_name="آدرس")
     description     =   models.CharField('توضیحات',max_length=100,null=True,blank=True)
 
     def __str__(self):
