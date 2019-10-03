@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <link rel="stylesheet" href="js-persian-cal.css">
+    <style>
+        #input-form {
+            margin: 25px;
+            padding: 25px;
+            width: 90%;
+            background-color: rgba(45, 103, 179, 0.9);
+            border-radius: 15px 5px 15px 5px;
+        }
+
+       
+        form input {
+            width: 100%;
+
+        }
+
+        label::after {
+            content: '';
+            display: block;
+        }
+
+        label {
+            color: aliceblue;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    {% include "navbar.html" %}
+    {% load getattribute %}
+    {% load l10n %}
+    <div id='form'>
+        <form style="padding: 20px;" method="POST" action=".">
+            {% csrf_token %}
+            {{form}}
+        </form>
+    </div>
+
+    <div id='data-list'>
+        <table>
+            <caption>لیست عملکرد فصول شرکت آروین کیان سازه</caption>
+            <tr>
+                <!-- if select checkbox is tru you will seel check box in the first of all rows-->
+                {% if select_checkbox %}
+                <th><input type="checkbox">همه</th>
+                {% endif %}
+
+                {% for title in titles %}
+                    {% if title not in exclude %}
+                        <th>{{title}}</th>
+                    {% endif %}
+                {% endfor %}
+
+                <!-- if opration button is true the you will see opration button in last col -->
+                {% if opration_buttons %}
+                <th>عملیات</th>
+                {% endif %}
+
+            </tr>
+
+            <!-- check if exist any object -->
+            {% if objects %}
+                    <!-- loop through objects for display in html file -->
+                    {% for object in objects %}
+                        <tr>
+                            
+                            <!-- if opration button is true the you will see opration button in last col -->
+                            {% if select_checkbox %}
+                                <td><input type="checkbox"></td>
+                            {% endif %}
+                            <td>{{forloop.counter}}</td>
+
+                            {% for field in field_names %}
+
+                                
+                             
+                                {% if field == "year" %}
+                                        <!--check if field is year the disable separator for it-->
+                                        {% localize off %}
+                                            <td>{{ object|getattribute:field }}</td>
+                                        {% endlocalize %}
+                                {% else %}
+
+                                    {% if field not  in exclude %}
+                                        <td>{{ object|getattribute:field }}</td>
+                                    {% endif %}
+                                    
+                                {% endif %}
+
+                            {% endfor %}
+
+                            <!-- if opration button is true the you will see opration button in last col -->
+                            {% if opration_buttons %}
+                            <td>
+                                {% for key,values in opration_buttons.items %}
+                                <a class='opration_btn' href="{% url values.1 id=object.id %}" name={{object.id}}
+                                    onclick={{key}}>{{values.0}}</a>
+                                {% endfor %}
+                            </td>
+                            {% endif %}
+
+                        </tr>
+                    {% endfor %}
+
+                    <tr>
+                        <td colspan="8" style="background-color: burlywood">Total</td>
+                        <td style="background-color: aquamarine">{{ total_income.gross_amount__sum }}</td>
+                        <td style="border-style:none"></td>
+                        <td style="background-color: aquamarine">{{ total_VAT.VAT_amount__sum }}</td>
+                        <td style="border-style:none"></td>
+                        <td style="background-color: aquamarine">{{ total_tax.tax_amount__sum }}</td>
+                        <td style="background-color: aquamarine">{{ total_pay.pay_amount__sum }}</td>
+                    </tr>
+            {% endif %}
+        </table>
+    </div>
+</body>
+
+</html>
