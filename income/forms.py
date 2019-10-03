@@ -22,4 +22,8 @@ class IncomeForm(forms.ModelForm):
 
 class SeasonReport(forms.Form):
     seasons=[(1,'بهار'),(2,'تابستان'),(3,'‍پاییز'),(4,'زمستان')]
-    season=forms.ChoiceField(choices=seasons)
+    season=forms.ChoiceField(choices=seasons,widget=forms.Select(attrs={'onchange':'this.form.submit();'}))
+
+class EmployerPyementReport(forms.Form):
+    field=Employeer.objects.all()
+    employer=forms.ModelChoiceField(queryset=field,widget=forms.Select(attrs={'onchange':'this.form.submit();'}))
