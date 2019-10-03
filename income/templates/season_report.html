@@ -13,6 +13,7 @@
             border-radius: 15px 5px 15px 5px;
         }
 
+       
         form input {
             width: 100%;
 
@@ -36,16 +37,15 @@
     {% load getattribute %}
     {% load l10n %}
     <div id='form'>
-        <form method="POST" action=".">
+        <form style="padding: 20px;" method="POST" action=".">
             {% csrf_token %}
             {{form}}
-
-            <button type="submit">تایید</button>
         </form>
     </div>
 
     <div id='data-list'>
         <table>
+            <caption>لیست عملکرد فصول شرکت آروین کیان سازه</caption>
             <tr>
                 <!-- if select checkbox is tru you will seel check box in the first of all rows-->
                 {% if select_checkbox %}
@@ -53,9 +53,9 @@
                 {% endif %}
 
                 {% for title in titles %}
-                <th>
-                    {{title}}
-                </th>
+                    {% if title not in exclude %}
+                        <th>{{title}}</th>
+                    {% endif %}
                 {% endfor %}
 
                 <!-- if opration button is true the you will see opration button in last col -->
@@ -76,14 +76,18 @@
                 <td>{{forloop.counter}}</td>
 
                 {% for field in field_names %}
-                {% if field == "year" %}
-                <!--check if field is year the disable separator for it-->
-                {% localize off %}
-                <td>{{ object|getattribute:field }}</td>
-                {% endlocalize %}
-                {% else %}
-                <td>{{ object|getattribute:field }}</td>
-                {% endif %}
+                    
+                    {% if field == "year" %}
+                        <!--check if field is year the disable separator for it-->
+                        {% localize off %}
+                        <td>{{ object|getattribute:field }}</td>
+                        {% endlocalize %}
+                    {% else %}
+                        {% if field not  in exclude %}
+                            <td>{{ object|getattribute:field }}</td>
+                        {% endif %}
+                    {% endif %}
+
                 {% endfor %}
 
                 <!-- if opration button is true the you will see opration button in last col -->
@@ -98,6 +102,16 @@
 
             </tr>
             {% endfor %}
+
+                <tr>
+                    <td colspan="8" style="background-color: burlywood">Total</td>
+                    <td style="background-color: aquamarine">{{ total_income.gross_amount__sum }}</td>
+                    <td style="border-style:none"></td>
+                    <td style="background-color: aquamarine">{{ total_VAT.VAT_amount__sum }}</td>
+                    <td style="border-style:none"></td>
+                    <td style="background-color: aquamarine">{{ total_tax.tax_amount__sum }}</td>
+                    <td style="background-color: aquamarine">{{ total_pay.pay_amount__sum }}</td>
+                </tr>
             {% endif %}
         </table>
     </div>
