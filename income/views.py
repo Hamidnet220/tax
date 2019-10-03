@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.db.models import Sum
 from django.urls import reverse_lazy
 from django.views.generic import TemplateView,FormView
 from .models import Income
@@ -32,21 +33,31 @@ def get_season_view(request,*args,**kwargs):
             
         ordering=('year','month','day')
         form=SeasonReport(request.POST)
+
         view=ViewGenerator(table=Income,entities=incoms,opration_buttons={},
                     select_checkbox=False,add_url='add_income',ordering=ordering)
-        contxt=view.get_context_template()
+        total_income=incoms.aggregate(Sum('gross_amount'))
+        total_tax=incoms.aggregate(Sum('tax_amount'))
+        total_VAT=incoms.aggregate(Sum('VAT_amount'))
+        total_pay=incoms.aggregate(Sum('pay_amount'))
+        total_fields={'total_income':total_income,'total_tax':total_tax,
+        'total_VAT':total_VAT,'total_pay':total_pay}
+        context=view.get_context_template()
         additon={'form':form}
-        contxt.update(**additon)
-        return render(request,"season_report.html",contxt)
+        exclude_fields={'exclude':['description']}
+        context.update(**additon)
+        context.update(**total_fields)
+        context.update(**exclude_fields)
+        print(total_fields)
+        return render(request,"season_report.html",context)
     else:    
-        print("Hello there I am before post method.")
         form=SeasonReport()
-
-    return render(request,"season_report.html",{'form':form})
+        return render(request,"season_report.html",{'form':form})
 
 # Employeers view
 def get_employeers_view(request,*args,**kwargs):
-    view=ViewGenerator(Employeer,{},False,'add_employeer')
+    view=ViewGenerator(table=Employeer,opration_buttons={},select_checkbox=False,
+                        add_url='add_employeer')
     return render(request,"list_objects.html",view.get_context_template())
 
 class AddEmployeerView(FormView):
@@ -66,3 +77,33 @@ class AddIncomeView(FormView):
     def form_valid(self, form):
         form.save_record()
         return super().form_valid(form)
+
+def get_employer_payment_view(request,*args,**kwargs):
+    if request.method=='POST':
+        ordering=('year','month','day')
+        form=EmployerPyementReport(request.POST)
+        print(request.POST)
+        empolyer=int(request.POST['employer'])
+        incoms=Income.objects.filter(employeer_id=empolyer)
+        total_income=Income.objects.filter(employeer_id=empolyer).aggregate(Sum('gross_amount'))
+        total_tax=Income.objects.filter(employeer_id=empolyer).aggregate(Sum('tax_amount'))
+        total_VAT=Income.objects.filter(employeer_id=empolyer).aggregate(Sum('VAT_amount'))
+        total_pay=Income.objects.filter(employeer_id=empolyer).aggregate(Sum('pay_amount'))
+        view=ViewGenerator(table=Income,entities=incoms,opration_buttons={},
+                    select_checkbox=False,add_url='add_income',ordering=ordering)
+        context=view.get_context_template()
+        additon={'form':form}
+        total_fields={'total_income':total_income,'total_tax':total_tax,
+        'total_VAT':total_VAT,'total_pay':total_pay}
+        exclude_fields={'exclude':['description']}
+        context.update(**additon)
+        context.update(**total_fields)
+        context.update(**exclude_fields)
+        print(context)
+        return render(request,"employer_payment_list.html",context)
+    else:
+        form=EmployerPyementReport()
+    
+    return render(request,"employer_payment_list.html",{'form':form})
+
+
