@@ -163,8 +163,42 @@ def get_employer_payment_view(request,*args,**kwargs):
 def get_contracts_view(request,id,*args,**kwargs):
     
    contracts=Contract.objects.filter(employer_id=id)
+   for contract in contracts:
+       contract_amount=contract.gross_amount
+       incomes=Income.objects.filter(contract=contract)
+       total_income=incomes.aggregate(Sum('gross_amount'))
+       contract.final_amount=total_income['gross_amount__sum']
+       contract.progress='{0:.3g}'.format(total_income['gross_amount__sum']/contract_amount)
+       contract.save()
+    
+
    view=ViewGenerator(table=Contract,entities=contracts,
                      opration_buttons={},select_checkbox=False,add_url='add_employeer')
    print(view.get_context_template())
    return render(request,"list.html",view.get_context_template())  
     
+def get_contract_payments_view(request,*args,**kwargs):
+    if request.method=='POST':
+        ordering=('year','month','day')
+        form=ContractPymentReport(request.POST)
+        contract=int(request.POST['contract'])
+        incoms=Income.objects.filter(contract_id=contract)
+        total_income=Income.objects.filter(contract_id=contract).aggregate(Sum('gross_amount'))
+        total_tax=Income.objects.filter(contract_id=contract).aggregate(Sum('tax_amount'))
+        total_VAT=Income.objects.filter(contract_id=contract).aggregate(Sum('VAT_amount'))
+        total_pay=Income.objects.filter(contract_id=contract).aggregate(Sum('pay_amount'))
+        view=ViewGenerator(table=Income,entities=incoms,opration_buttons={},
+                    select_checkbox=False,add_url='add_income',ordering=ordering)
+        context=view.get_context_template()
+        additon={'form':form}
+        total_fields={'total_income':total_income,'total_tax':total_tax,
+        'total_VAT':total_VAT,'total_pay':total_pay}
+        exclude_fields={'exclude':['description']}
+        context.update(**additon)
+        context.update(**total_fields)
+        context.update(**exclude_fields)
+        return render(request,"contract_payment_list.html",context)
+    else:
+        form=ContractPymentReport()
+    
+    return render(request,"contract_payment_list.html",{'form':form})

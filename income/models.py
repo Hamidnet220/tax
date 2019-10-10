@@ -35,7 +35,9 @@ class Contract(models.Model):
     title       =   models.CharField('عنوان قرارداد',max_length=100)
     number      =   models.CharField('شماره قرارداد',max_length=50)
     date        =   models.DateField('تاریخ',)
-    gross_amount=   models.DecimalField('مبلغ قرارداد',max_digits=20,decimal_places=2,default=0)
+    gross_amount=   models.DecimalField('مبلغ اولیه قرارداد',max_digits=20,decimal_places=2,default=0)
+    final_amount=   models.DecimalField('مبلغ نهایی قرارداد',max_digits=20,decimal_places=2,default=0)
+    progress    =   models.DecimalField('درصد پیشرفت',max_digits=10,decimal_places=2,default=0)
     description =   models.CharField('توضیحات',blank=True,max_length=100)
 
     def __str__(self):
@@ -44,6 +46,7 @@ class Contract(models.Model):
 class Income(models.Model):
     employeer   =   models.ForeignKey(Employeer,verbose_name='کارفرما',on_delete=models.CASCADE)
     contract    =   models.ForeignKey(Contract,verbose_name='قرارداد',max_length=150,on_delete=models.CASCADE)
+    title       =   models.CharField('عنوان پرداخت',max_length=100,blank=True)
     year        =   models.IntegerField('سال')
     month       =   models.IntegerField('ماه')
     day         =   models.IntegerField('روز')
