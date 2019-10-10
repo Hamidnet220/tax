@@ -2,13 +2,27 @@ from django.shortcuts import render
 from django.db.models import Sum
 from django.urls import reverse_lazy
 from django.views.generic import TemplateView,FormView
-from .models import Income
+from .models import Income,Contract
 from .forms import *
 from views_generator import ViewGenerator
+from django.forms.formsets import formset_factory
+
 # Create your views here.
 
 class home_view(TemplateView):
     template_name="home.html"
+
+def get_banks(request,*args,**kwargs):
+    BankFormSet=formset_factory(BankForm,extra=4)
+    formset=BankFormSet()
+    return render(request,"grid_data.html",{'formset':formset})
+
+def get_banks1(request,*args,**kwargs):
+    
+    view=ViewGenerator(table=Bank,opration_buttons={},
+                        select_checkbox=False,add_url='add_bank')
+
+    return render(request,"list.html",view.get_context_template())
 
 # Incomes view
 def get_incomes_view(request,*args,**kwargs):
@@ -16,7 +30,7 @@ def get_incomes_view(request,*args,**kwargs):
     view=ViewGenerator(table=Income,opration_buttons={},
                         select_checkbox=False,add_url='add_income',ordering=ordering)
 
-    return render(request,"list_objects.html",view.get_context_template())
+    return render(request,"list.html",view.get_context_template())
 
 #Session Report view
 def get_season_view(request,*args,**kwargs):
@@ -54,11 +68,51 @@ def get_season_view(request,*args,**kwargs):
         form=SeasonReport()
         return render(request,"season_report.html",{'form':form})
 
+#Get all incoms in specfic year as declarations
+def declaration_view(request,*args,**kwargs):
+    incomes=Income.objects.filter(year=1398)
+    ordering=('year','month','day')
+    print(incomes)
+    view=ViewGenerator(table=Income,entities=incomes,opration_buttons={},select_checkbox=False,
+    add_url='',ordering=ordering)
+
+    #Total fields 
+    total_income=incomes.aggregate(Sum('gross_amount'))
+    total_tax=incomes.aggregate(Sum('tax_amount'))
+    total_VAT=incomes.aggregate(Sum('VAT_amount'))
+    total_pay=incomes.aggregate(Sum('pay_amount'))
+    total_fields={'total_income':total_income,'total_tax':total_tax,
+        'total_VAT':total_VAT,'total_pay':total_pay}
+
+    #Exclude fields
+    exclude_fields={'exclude':['description']}
+    
+    #crate context for template
+    context=view.get_context_template()
+
+    # add total fields to context
+    context.update(**total_fields)
+
+    #add exclude fields to context 
+    context.update(**exclude_fields)
+
+     
+    return render(request,"declaration.html",context)
+    
 # Employeers view
 def get_employeers_view(request,*args,**kwargs):
     view=ViewGenerator(table=Employeer,opration_buttons={},select_checkbox=False,
                         add_url='add_employeer')
-    return render(request,"list_objects.html",view.get_context_template())
+    return render(request,"employer_list.html",view.get_context_template())
+
+class AddBankView(FormView):
+    template_name   =   'input_form.html'
+    form_class      =   BankForm
+    success_url     =   reverse_lazy('banks')
+    
+    def form_valid(self, form):
+        form.save_record()
+        return super().form_valid(form)
 
 class AddEmployeerView(FormView):
     template_name   =   'input_form.html'
@@ -106,4 +160,11 @@ def get_employer_payment_view(request,*args,**kwargs):
     
     return render(request,"employer_payment_list.html",{'form':form})
 
-
+def get_contracts_view(request,id,*args,**kwargs):
+    
+   contracts=Contract.objects.filter(employer_id=id)
+   view=ViewGenerator(table=Contract,entities=contracts,
+                     opration_buttons={},select_checkbox=False,add_url='add_employeer')
+   print(view.get_context_template())
+   return render(request,"list.html",view.get_context_template())  
+    

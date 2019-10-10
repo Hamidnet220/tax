@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <style>
+        label {
+            color: aliceblue;
+        }
+
+        #data-list th {
+            text-align: center;
+            background-color: rgb(98, 131, 190);
+            border: 1px solid #555;
+            font-size: 90%;
+            font-style: normal;
+            padding-top: 0;
+        }
+
+        #data-list td {
+            text-align: center;
+            border: 1px solid #555;
+            font-size: 92%;
+
+        }
+
+
+        #data-list table {
+            border-spacing: 0px;
+            width: 100%;
+
+        }
+
+        #data-list {
+            margin-top: 5%;
+            width: 100%;
+            overflow: auto;
+        }
+
+
+        .button {
+            border: 1px solid #666;
+            text-decoration: none;
+            float: left;
+            margin-left: 3px;
+            margin-top: 8px;
+            padding: 2px;
+            background-color: #333;
+            color: #f3f3f3;
+            border-radius: 3px;
+        }
+
+        .opration_btn {
+            text-decoration: none;
+            float: right;
+            height: 100%;
+            margin-top: 0;
+            border: #333 solid 1px;
+            margin-left: 1px;
+            padding: 2px;
+            color: #11d;
+        }
+
+        #jump-top {
+            color: white;
+            text-decoration: none;
+            border-radius: 23px;
+            background-color: #666;
+            position: fixed;
+            z-index: 999999;
+            bottom: 35px;
+            right: 10px;
+            font-size: 2.5em;
+            height: 35px;
+            width: 37px;
+            text-align: center;
+            vertical-align: top;
+            display: inline-block;
+            line-height: 29px;
+            cursor:pointer;
+        }
+
+        
+    </style>
+
+</head>
+
+<body>
+    {% include "navbar.html" %}
+    {% load getattribute %}
+    {% load l10n %}
+
+    <div id='page_top'></div>
+    <a href="#page_top" id="jump-top" class="fa fa-angle-up fa-4x-up"></a>
+    <a href="{% url add_url_name %}" class="button" target="blank">جدید</a>
+    <div id='data-list'>
+        <table>
+
+            <!-- Add Header Row. -->
+            <tr>
+                <!-- if select checkbox is tru you will seel check box in the first of all rows-->
+                {% if select_checkbox %}
+                    <th><input type="checkbox">همه</th>
+                {% endif %}
+                
+                <!-- Add Header row by nams of table fields. -->
+                {% for title in titles %}
+                <th>
+                    {{title}}
+                </th>
+                {% endfor %}
+
+                <!-- if opration button is true the you will see opration button in last col -->
+                {% if opration_buttons %}
+                    <th>عملیات</th>
+                {% endif %}
+
+            </tr>
+
+            <!-- check if exist any object -->
+            {% if objects %}
+            <!-- loop through objects for display in html file -->
+                {% for object in objects %}
+                    <tr>
+                        <!-- if opration button is true the you will see opration button in last col -->
+                        {% if select_checkbox %}
+                            <td><input type="checkbox"></td>
+                        {% endif %}
+
+                        <!-- Add row number for each object. -->
+                        <td>{{forloop.counter}}</td>
+                        
+                        <!-- Add field value. -->
+                        {% for field in field_names %}
+                            
+                            {% if field == "year" %}
+                                {% localize off %}
+                                    <td>{{ object|getattribute:field }}</td>
+                                {% endlocalize %}
+                            {% elif field == "title" %}
+                                 <td><a href="{% url 'contracts' id=object.id %}"> {{ object|getattribute:field }} </a></td>
+                            {% else %}
+                                <td>{{ object|getattribute:field }}</td>
+                            {% endif %}
+                        {% endfor %}
+
+                        <!-- Add opration button in last column. -->
+                        {% if opration_buttons %}
+                        <td>
+                            {% for key,values in opration_buttons.items %}
+                            <a class='opration_btn' href="{% url values.1 id=object.id %}" name={{object.id}}
+                                onclick={{key}}>{{values.0}}</a>
+                            {% endfor %}
+                        </td>
+                        {% endif %}
+
+                    </tr>
+                {% endfor %}
+            {% endif %}
+        </table>
+    </div>
+    <script>
+
+    </script>
+
+</body>
+
+</html>

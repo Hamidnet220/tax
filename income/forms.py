@@ -1,5 +1,5 @@
 from django import forms
-from .models import Income,Employeer
+from .models import Income, Employeer, Bank
 
 class AddEmployeerForm(forms.ModelForm):
     class Meta:
@@ -27,3 +27,11 @@ class SeasonReport(forms.Form):
 class EmployerPyementReport(forms.Form):
     field=Employeer.objects.all()
     employer=forms.ModelChoiceField(queryset=field,widget=forms.Select(attrs={'onchange':'this.form.submit();'}))
+
+class BankForm(forms.ModelForm):
+    class Meta:
+        model=Bank
+        fields='__all__'
+    
+    def save_record(self):
+        Bank.objects.create(**self.cleaned_data)

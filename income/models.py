@@ -5,6 +5,10 @@ class City(models.Model):
     def __str__(self):
         return self.name
 
+class FinancialYear(models.Model):
+    year           =   models.IntegerField('سال مالی')
+    is_deleted     =   models.BooleanField()
+    description    =   models.TextField('توضیحات')
 class Employeer(models.Model):
     title           =   models.CharField('نام کارفرما',max_length=50)
     national_code   =   models.CharField('شناسه ملی',max_length=11)
@@ -15,7 +19,7 @@ class Employeer(models.Model):
     description     =   models.CharField('توضیحات',max_length=100,null=True,blank=True)
 
     def __str__(self):
-        return "{}-{}".format(self.title,self.national_code)
+        return self.title
 
 class Bank(models.Model):
     title           =   models.CharField('نام بانک',max_length=50)
@@ -27,6 +31,7 @@ class Bank(models.Model):
         return "{}-{}".format(self.title,self.account_number)
 
 class Contract(models.Model):
+    employer    =   models.ForeignKey(Employeer,verbose_name="کارفرما",on_delete=models.CASCADE)
     title       =   models.CharField('عنوان قرارداد',max_length=100)
     number      =   models.CharField('شماره قرارداد',max_length=50)
     date        =   models.DateField('تاریخ',)
