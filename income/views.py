@@ -6,7 +6,7 @@ from .models import Income,Contract
 from .forms import *
 from views_generator import ViewGenerator
 from django.forms.formsets import formset_factory
-
+import decimal
 # Create your views here.
 
 class home_view(TemplateView):
@@ -71,8 +71,12 @@ def get_season_view(request,*args,**kwargs):
 #Get all incoms in specfic year as declarations
 def declaration_view(request,*args,**kwargs):
     incomes=Income.objects.filter(year=1398)
+
+    for income in incomes:
+        income.tax_amount=round(income.gross_amount * decimal.Decimal(0.03),0)
+        income.save()
+
     ordering=('year','month','day')
-    print(incomes)
     view=ViewGenerator(table=Income,entities=incomes,opration_buttons={},select_checkbox=False,
     add_url='',ordering=ordering)
 
