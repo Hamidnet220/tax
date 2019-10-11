@@ -6,5 +6,7 @@ urlpatterns=[
     path("employer_payment/",get_employer_payment_view,name="employer_payment"),
     path("contract_payments/",get_contract_payments_view,name="contract_payments"),
     path("declaration/",declaration_view,name="declaration"),
+    path("contracts/",get_contracts_list_view,name="contracts_list"),
+    path("contracts/add",AddContractView.as_view(),name="contracts_add"),
     path('employer/contracts/<int:id>',get_contracts_view,name='contracts'),
 ]

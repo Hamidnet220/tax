@@ -114,6 +114,15 @@ class AddBankView(FormView):
         form.save_record()
         return super().form_valid(form)
 
+class AddContractView(FormView):
+    template_name   =   'input_form.html'
+    form_class      =   AddContractForm
+    success_url     =   reverse_lazy('contracts_list')
+    
+    def form_valid(self, form):
+        form.save_record()
+        return super().form_valid(form)
+
 class AddEmployeerView(FormView):
     template_name   =   'input_form.html'
     form_class      =   AddEmployeerForm
@@ -161,7 +170,6 @@ def get_employer_payment_view(request,*args,**kwargs):
     return render(request,"employer_payment_list.html",{'form':form})
 
 def get_contracts_view(request,id,*args,**kwargs):
-    
    contracts=Contract.objects.filter(employer_id=id)
    for contract in contracts:
        contract_amount=contract.gross_amount
@@ -176,6 +184,24 @@ def get_contracts_view(request,id,*args,**kwargs):
                      opration_buttons={},select_checkbox=False,add_url='add_employeer')
    print(view.get_context_template())
    return render(request,"list.html",view.get_context_template())  
+
+
+def get_contracts_list_view(request,*args,**kwargs):
+    
+   contracts=Contract.objects.all()
+   for contract in contracts:
+       contract_amount=contract.gross_amount
+       incomes=Income.objects.filter(contract=contract)
+       total_income=incomes.aggregate(Sum('gross_amount'))
+       contract.final_amount=total_income['gross_amount__sum']
+       contract.progress='{0:.3g}'.format(total_income['gross_amount__sum']/contract_amount)
+       contract.save()
+    
+
+   view=ViewGenerator(table=Contract,
+                     opration_buttons={},select_checkbox=False,add_url='contracts_add')
+   return render(request,"contracts_list.html",view.get_context_template())  
+    
     
 def get_contract_payments_view(request,*args,**kwargs):
     if request.method=='POST':

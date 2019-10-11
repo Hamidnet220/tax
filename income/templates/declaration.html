@@ -103,12 +103,14 @@
                 <th><input type="checkbox">همه</th>
                 {% endif %}
 
+                
                 {% for title in titles %}
-                <th>
-                    {{title}}
-                </th>
+                    {% if title not in exclude %}
+                        <th>{{title}}</th>
+                    {% endif %}
                 {% endfor %}
 
+                
                 <!-- if opration button is true the you will see opration button in last col -->
                 {% if opration_buttons %}
                 <th>عملیات</th>
@@ -125,16 +127,20 @@
                     <td><input type="checkbox"></td>
                 {% endif %}
                 <td>{{forloop.counter}}</td>
-                
                 {% for field in field_names %}
-                    {% if field == "year" %}<!--check if field is year the disable separator for it-->
+                    
+                    {% if field == "year" %}
+                        <!--check if field is year the disable separator for it-->
                         {% localize off %}
                             <td>{{ object|getattribute:field }}</td>
                         {% endlocalize %}
                     {% else %}
-                        <td>{{ object|getattribute:field }}</td>
+                        {% if field not  in exclude %}
+                            <td>{{ object|getattribute:field }}</td>
+                        {% endif %}
                     {% endif %}
-                {% endfor %}
+
+                 {% endfor %}
 
                 <!-- if opration button is true the you will see opration button in last col -->
                 {% if opration_buttons %}

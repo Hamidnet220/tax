@@ -38,6 +38,7 @@ class Contract(models.Model):
     gross_amount=   models.DecimalField('مبلغ اولیه قرارداد',max_digits=20,decimal_places=2,default=0)
     final_amount=   models.DecimalField('مبلغ نهایی قرارداد',max_digits=20,decimal_places=2,default=0)
     progress    =   models.DecimalField('درصد پیشرفت',max_digits=10,decimal_places=2,default=0)
+    scan_file   =   models.FileField('فایل قرارداد',blank=True,upload_to='income/static/contracts')
     description =   models.CharField('توضیحات',blank=True,max_length=100)
 
     def __str__(self):

@@ -136,6 +136,12 @@
                             <td>{{ object|getattribute:field|jformat:"%Y/%m/%d" }}</td>
                         {% endlocalize %}
 
+                        {% elif field == "progress" %}
+                                {% if object.progress >= 1  %}
+                                    <td style="background-color: #36f" >{{ object|getattribute:field }}</td>
+                                {% else %}
+                                     <td style="background-color: indianred">{{object.progress}}</td>
+                                {% endif %}   
                     {% else %}
                         <td>{{ object|getattribute:field }}</td>
                     {% endif %}

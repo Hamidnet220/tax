@@ -119,7 +119,6 @@
 
     /* end of style full navbar */
 </style>
-
 <body>
     <div class="topnav" id="topNavbar">
 
@@ -128,10 +127,10 @@
             <a href="javascript:void(0)" class="closebtn" onclick=" closeNav('baseinfo')">&times;</a>
             <div class="overlay-content">
                 <div class="column">
-                    <a href="{% url 'employeers' %}">اطلاعات کارفرماها</a>
+                    <a href="{% url 'employeers' %}">اطلاعات کارفرمایان</a>
+                    <a href="{% url 'contracts_list' %}">اطلاعات قراردادها</a>
                     <a href="{% url 'incomes' %}">لیست درآمدها</a>
                     <a href="{% url 'banks' %}">لیست بانک ها</a>
-                    <a href="{% url 'home' %}">لیست شهرها</a>
                     <a href="{% url 'home' %}"></a>
 
                 </div>

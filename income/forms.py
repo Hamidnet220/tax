@@ -9,6 +9,14 @@ class AddEmployeerForm(forms.ModelForm):
     def save_record(self):
         Employeer.objects.create(**self.cleaned_data)
 
+class AddContractForm(forms.ModelForm):
+    class Meta:
+        model=Contract
+        fields='__all__'
+
+    def save_record(self):
+        Contract.objects.create(**self.cleaned_data)
+
 class IncomeForm(forms.ModelForm):
     class Meta:
         model=Income
@@ -23,6 +31,7 @@ class IncomeForm(forms.ModelForm):
 class SeasonReport(forms.Form):
     seasons=[(1,'بهار'),(2,'تابستان'),(3,'‍پاییز'),(4,'زمستان')]
     season=forms.ChoiceField(choices=seasons,widget=forms.Select(attrs={'onchange':'this.form.submit();'}))
+    file_path=forms.FileField(allow_empty_file=True)
 
 class EmployerPyementReport(forms.Form):
     field=Employeer.objects.all()
