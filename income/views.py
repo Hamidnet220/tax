@@ -89,7 +89,7 @@ def declaration_view(request,*args,**kwargs):
         'total_VAT':total_VAT,'total_pay':total_pay}
 
     #Exclude fields
-    exclude_fields={'exclude':['description']}
+    exclude_fields={'exclude':['بانک','description','bank']}
     
     #crate context for template
     context=view.get_context_template()
