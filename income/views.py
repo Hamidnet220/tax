@@ -5,19 +5,19 @@ from django.views.generic import TemplateView,FormView
 from .models import Income,Contract
 from .forms import *
 from views_generator import ViewGenerator
-from django.forms.formsets import formset_factory
+from django.forms import modelformset_factory
 import decimal
 # Create your views here.
 
 class home_view(TemplateView):
     template_name="home.html"
 
-def get_banks(request,*args,**kwargs):
-    BankFormSet=formset_factory(BankForm,extra=4)
+def get_bank1(request,*args,**kwargs):
+    BankFormSet = modelformset_factory(Bank,exclude=('Id',),extra=1)
     formset=BankFormSet()
     return render(request,"grid_data.html",{'formset':formset})
 
-def get_banks1(request,*args,**kwargs):
+def get_banks(request,*args,**kwargs):
     
     view=ViewGenerator(table=Bank,opration_buttons={},
                         select_checkbox=False,add_url='add_bank')
@@ -27,6 +27,12 @@ def get_banks1(request,*args,**kwargs):
 # Incomes view
 def get_incomes_view(request,*args,**kwargs):
     ordering=('year','month','day')
+    for income in Income.objects.all():
+        income.tax_amount=round(income.gross_amount * decimal.Decimal(0.03),0)
+        if income.VAT_included == True:
+            income.VAT_amount =round(income.gross_amount*decimal.Decimal(0.09),0)
+        income.save()
+        
     view=ViewGenerator(table=Income,opration_buttons={},
                         select_checkbox=False,add_url='add_income',ordering=ordering)
 
@@ -72,9 +78,7 @@ def get_season_view(request,*args,**kwargs):
 def declaration_view(request,*args,**kwargs):
     incomes=Income.objects.filter(year=1398)
 
-    for income in incomes:
-        income.tax_amount=round(income.gross_amount * decimal.Decimal(0.03),0)
-        income.save()
+    
 
     ordering=('year','month','day')
     view=ViewGenerator(table=Income,entities=incomes,opration_buttons={},select_checkbox=False,
@@ -194,10 +198,11 @@ def get_contracts_list_view(request,*args,**kwargs):
     
    contracts=Contract.objects.all()
    for contract in contracts:
-       contract_amount=contract.gross_amount
+       contract_amount=contract.gross_amount + contract.adjustment_amount
        incomes=Income.objects.filter(contract=contract)
        total_income=incomes.aggregate(Sum('gross_amount'))
-       contract.final_amount=total_income['gross_amount__sum']
+       contract.total_payments=total_income['gross_amount__sum']
+       contract.final_amount=contract_amount
        contract.progress='{0:.3g}'.format(total_income['gross_amount__sum']/contract_amount)
        contract.save()
     

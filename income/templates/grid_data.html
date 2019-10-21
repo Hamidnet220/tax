@@ -94,7 +94,22 @@
     <div id='data-list'>
         <form action="">
             <table>
-                   {{formset}}
+                
+                <tr>
+                    <th>ردیف</th>
+                    {% for field in formset.0 %}
+                        <th>{{field.label_tag}}</th>
+                    {% endfor %}
+                </tr>
+
+                {% for form in formset %}
+                <tr>
+                    <td>{{forloop.counter}}</td>
+                        {% for field in form%}
+                            <td>{{field}}</td>
+                        {% endfor %}
+                </tr> 
+                {% endfor %}
             </table>
         </form>
         

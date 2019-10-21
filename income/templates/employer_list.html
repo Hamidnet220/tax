@@ -121,7 +121,7 @@
             {% if objects %}
             <!-- loop through objects for display in html file -->
                 {% for object in objects %}
-                    <tr>
+                    <tr id={{object.id}}>
                         <!-- if opration button is true the you will see opration button in last col -->
                         {% if select_checkbox %}
                             <td><input type="checkbox"></td>
@@ -159,7 +159,13 @@
             {% endif %}
         </table>
     </div>
+
+
     <script>
+        $('tr').dblclick(function(){
+            var id = $(this).attr('id');
+            window.popup.question
+        })
 
     </script>
 
