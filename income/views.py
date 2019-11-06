@@ -203,7 +203,12 @@ def get_contracts_list_view(request,*args,**kwargs):
        total_income=incomes.aggregate(Sum('gross_amount'))
        contract.total_payments=total_income['gross_amount__sum']
        contract.final_amount=contract_amount
-       contract.progress='{0:.3g}'.format(total_income['gross_amount__sum']/contract_amount)
+       if contract.total_payments is not None:
+        contract.progress='{0:.3g}'.format(total_income['gross_amount__sum']/contract_amount)
+       else:
+        contract.total_payments=0
+        contract.progress=0
+
        contract.save()
     
 
