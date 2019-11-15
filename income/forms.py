@@ -1,5 +1,5 @@
 from django import forms
-from .models import Income, Employeer, Bank, Contract
+from .models import Income, Employeer, Bank, Contract, Buy
 
 class AddEmployeerForm(forms.ModelForm):
     class Meta:
@@ -27,6 +27,17 @@ class IncomeForm(forms.ModelForm):
 
     def update_record(self,id):
         Income.objects.filter(id=id).update(**self.cleaned_data)
+
+class BuyForm(forms.ModelForm):
+    class Meta:
+        model=Buy
+        fields='__all__'
+        
+    def save_record(self):
+        Buy.objects.create(**self.cleaned_data)
+
+    def update_record(self,id):
+        Buy.objects.filter(id=id).update(**self.cleaned_data)
 
 class SeasonReport(forms.Form):
     seasons=[(1,'بهار'),(2,'تابستان'),(3,'‍پاییز'),(4,'زمستان')]
