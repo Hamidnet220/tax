@@ -38,6 +38,15 @@ def get_incomes_view(request,*args,**kwargs):
 
     return render(request,"list.html",view.get_context_template())
 
+
+# Buys view 
+def get_buys_view(request,*args,**kwargs):
+    ordering=('year','month','day')
+    view=ViewGenerator(table=Buy,opration_buttons={},
+                        select_checkbox=False,add_url='add_buy',ordering=ordering)
+
+    return render(request,"list.html",view.get_context_template())
+
 #Session Report view
 def get_season_view(request,*args,**kwargs):
 
@@ -144,6 +153,15 @@ class AddIncomeView(FormView):
     template_name   =   'input_form.html'
     form_class      =   IncomeForm
     success_url     =   reverse_lazy('incomes')
+
+    def form_valid(self, form):
+        form.save_record()
+        return super().form_valid(form)
+
+class AddBuyView(FormView):
+    template_name   =   'input_form.html'
+    form_class      =   BuyForm
+    success_url     =   reverse_lazy('buys')
 
     def form_valid(self, form):
         form.save_record()
