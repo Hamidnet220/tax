@@ -26,6 +26,8 @@ urlpatterns = [
     path('employeers/add',AddEmployeerView.as_view(),name="add_employeer"),
     path('incomes/',get_incomes_view,name='incomes'),
     path('incomes/add/',AddIncomeView.as_view(),name='add_income'),
+    path('buys/',get_buys_view,name='buys'),
+    path('buys/add/',AddBuyView.as_view(),name='add_buy'),
     path('banks/',get_banks,name="banks"),
     path('banks/add',AddBankView.as_view(),name="add_bank")
 
