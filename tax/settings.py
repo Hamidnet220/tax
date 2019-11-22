@@ -40,6 +40,8 @@ INSTALLED_APPS = [
     'django_jalali',
     'income',
     'hesab',
+    'docmanagment'
+
 ]
 
 MIDDLEWARE = [
