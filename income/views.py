@@ -260,3 +260,8 @@ def get_contract_payments_view(request,*args,**kwargs):
         form=ContractPymentReport()
     
     return render(request,"contract_payment_list.html",{'form':form})
+
+def update_employer_view(request,id):
+    if request.method=='POST':
+        employer=Employeer.objects.get(id=id)
+        form=AddEmployeerForm(employer)

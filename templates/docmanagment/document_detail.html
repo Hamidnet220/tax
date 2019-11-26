@@ -1,0 +1,7 @@
+{% include "navbar.html" %}
+
+{% block content %}
+{% load static %}
+<h1>{{ object.title }}</h1>
+<img src="{% static "contract/Documents/pic.jpg" %}">
+{% endblock %}

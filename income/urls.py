@@ -9,4 +9,5 @@ urlpatterns=[
     path("contracts/",get_contracts_list_view,name="contracts_list"),
     path("contracts/add",AddContractView.as_view(),name="contracts_add"),
     path('employer/contracts/<int:id>',get_contracts_view,name='contracts'),
+    path('employer/<int:id',get_employeers_view),
 ]

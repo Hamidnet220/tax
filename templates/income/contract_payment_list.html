@@ -35,7 +35,8 @@
 
     {% include "navbar.html" %}
     {% load getattribute %}
-    {% load l10n %}
+    {% load humanize %}
+
     <div id='form'>
         <form style="padding: 20px;" method="POST" action=".">
             {% csrf_token %}
@@ -83,9 +84,7 @@
                              
                                 {% if field == "year" %}
                                         <!--check if field is year the disable separator for it-->
-                                        {% localize off %}
                                             <td>{{ object|getattribute:field }}</td>
-                                        {% endlocalize %}
                                 {% else %}
 
                                     {% if field not  in exclude %}
@@ -111,7 +110,7 @@
 
                     <tr>
                         <td colspan="9" style="background-color: burlywood">Total</td>
-                        <td style="background-color: aquamarine">{{ total_income.gross_amount__sum }}</td>
+                        <td style="background-color: aquamarine">{{ total_income.gross_amount__sum | intcomma }}</td>
                         <td style="border-style:none"></td>
                         <td style="background-color: aquamarine">{{ total_VAT.VAT_amount__sum }}</td>
                         <td style="border-style:none"></td>

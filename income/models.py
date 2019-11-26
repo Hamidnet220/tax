@@ -18,6 +18,9 @@ class Employeer(models.Model):
     address         =   models.TextField(verbose_name="آدرس")
     description     =   models.CharField('توضیحات',max_length=100,null=True,blank=True)
 
+    def get_abseloute_url(self):
+        return f"/employers/{self.id}"
+
     def __str__(self):
         return self.title
 

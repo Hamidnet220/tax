@@ -15,13 +15,14 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path,include
+from django.conf import settings
+from django.conf.urls import static
 from django.views.generic import TemplateView
 from income.views import *
 
-
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('',home_view.as_view(),name='home'),
+    path('',include('pages.url')),
     path('employeers/',get_employeers_view,name="employeers"),
     path('employeers/add',AddEmployeerView.as_view(),name="add_employeer"),
     path('incomes/',get_incomes_view,name='incomes'),
@@ -29,12 +30,8 @@ urlpatterns = [
     path('buys/',get_buys_view,name='buys'),
     path('buys/add/',AddBuyView.as_view(),name='add_buy'),
     path('banks/',get_banks,name="banks"),
-    path('banks/add',AddBankView.as_view(),name="add_bank")
+    path('banks/add',AddBankView.as_view(),name="add_bank"),
+    path('report/',include('income.urls')),
+    path('documents/',include('docmanagment.urls'))
 
-]
-
-urlpatterns+=[
-    path('report/',include('income.urls'))
-]
-
-
+    ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
