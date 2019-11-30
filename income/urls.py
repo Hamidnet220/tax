@@ -10,5 +10,5 @@ urlpatterns=[
     path("employer-pays/",get_employer_payment_view,name="employer-pays"),
     path("contract-pays/",get_contract_payments_view,name="contract-pays"),
     path("declaration/",declaration_view,name="declaration"),
-    path('employercontracts/<int:id>',get_contracts_view,name='employer-contracts'),
+    path('employercontracts/<int:id>',get_contracts_view,name="employer-contracts"),
 ]
