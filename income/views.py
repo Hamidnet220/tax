@@ -7,22 +7,7 @@ from .forms import *
 from views_generator import ViewGenerator
 from django.forms import modelformset_factory
 import decimal
-# Create your views here.
 
-class home_view(TemplateView):
-    template_name="home.html"
-
-def get_bank1(request,*args,**kwargs):
-    BankFormSet = modelformset_factory(Bank,exclude=('Id',),extra=1)
-    formset=BankFormSet()
-    return render(request,"grid_data.html",{'formset':formset})
-
-def get_banks(request,*args,**kwargs):
-    
-    view=ViewGenerator(table=Bank,opration_buttons={},
-                        select_checkbox=False,add_url='add_bank')
-
-    return render(request,"list.html",view.get_context_template())
 
 # Incomes view
 def get_incomes_view(request,*args,**kwargs):
@@ -34,18 +19,18 @@ def get_incomes_view(request,*args,**kwargs):
         income.save()
         
     view=ViewGenerator(table=Income,opration_buttons={},
-                        select_checkbox=False,add_url='add_income',ordering=ordering)
+                        select_checkbox=False,add_url='income-create',ordering=ordering)
 
-    return render(request,"list.html",view.get_context_template())
+    return render(request,"share/list.html",view.get_context_template())
 
 
 # Buys view 
 def get_buys_view(request,*args,**kwargs):
     ordering=('year','month','day')
     view=ViewGenerator(table=Buy,opration_buttons={},
-                        select_checkbox=False,add_url='add_buy',ordering=ordering)
+                        select_checkbox=False,add_url='buy-create',ordering=ordering)
 
-    return render(request,"list.html",view.get_context_template())
+    return render(request,"share/list.html",view.get_context_template())
 
 #Session Report view
 def get_season_view(request,*args,**kwargs):
@@ -64,7 +49,7 @@ def get_season_view(request,*args,**kwargs):
         form=SeasonReport(request.POST)
 
         view=ViewGenerator(table=Income,entities=incoms,opration_buttons={},
-                    select_checkbox=False,add_url='add_income',ordering=ordering)
+                    select_checkbox=False,add_url='income-create',ordering=ordering)
         total_income=incoms.aggregate(Sum('gross_amount'))
         total_tax=incoms.aggregate(Sum('tax_amount'))
         total_VAT=incoms.aggregate(Sum('VAT_amount'))
@@ -78,10 +63,10 @@ def get_season_view(request,*args,**kwargs):
         context.update(**total_fields)
         context.update(**exclude_fields)
         print(total_fields)
-        return render(request,"season_report.html",context)
+        return render(request,"income/season_report.html",context)
     else:    
         form=SeasonReport()
-        return render(request,"season_report.html",{'form':form})
+        return render(request,"income/season_report.html",{'form':form})
 
 #Get all incoms in specfic year as declarations
 def declaration_view(request,*args,**kwargs):
@@ -114,54 +99,21 @@ def declaration_view(request,*args,**kwargs):
     context.update(**exclude_fields)
 
      
-    return render(request,"declaration.html",context)
+    return render(request,"income/declaration.html",context)
     
-# Employeers view
-def get_employeers_view(request,*args,**kwargs):
-    view=ViewGenerator(table=Employeer,opration_buttons={},select_checkbox=False,
-                        add_url='add_employeer')
-    return render(request,"employer_list.html",view.get_context_template())
-
-class AddBankView(FormView):
-    template_name   =   'input_form.html'
-    form_class      =   BankForm
-    success_url     =   reverse_lazy('banks')
-    
-    def form_valid(self, form):
-        form.save_record()
-        return super().form_valid(form)
-
-class AddContractView(FormView):
-    template_name   =   'input_form.html'
-    form_class      =   AddContractForm
-    success_url     =   reverse_lazy('contracts_list')
-    
-    def form_valid(self, form):
-        form.save_record()
-        return super().form_valid(form)
-
-class AddEmployeerView(FormView):
-    template_name   =   'input_form.html'
-    form_class      =   AddEmployeerForm
-    success_url     =   reverse_lazy('employeers')
-
-    def form_valid(self, form):
-        form.save_record()
-        return super().form_valid(form)
-
 class AddIncomeView(FormView):
-    template_name   =   'input_form.html'
+    template_name   =   'share/input_form.html'
     form_class      =   IncomeForm
-    success_url     =   reverse_lazy('incomes')
+    success_url     =   reverse_lazy('income-list')
 
     def form_valid(self, form):
         form.save_record()
         return super().form_valid(form)
 
 class AddBuyView(FormView):
-    template_name   =   'input_form.html'
+    template_name   =   'share/input_form.html'
     form_class      =   BuyForm
-    success_url     =   reverse_lazy('buys')
+    success_url     =   reverse_lazy('buy-list')
 
     def form_valid(self, form):
         form.save_record()
@@ -171,13 +123,12 @@ def get_employer_payment_view(request,*args,**kwargs):
     if request.method=='POST':
         ordering=('year','month','day')
         form=EmployerPyementReport(request.POST)
-        print(request.POST)
         empolyer=int(request.POST['employer'])
-        incoms=Income.objects.filter(employeer_id=empolyer)
-        total_income=Income.objects.filter(employeer_id=empolyer).aggregate(Sum('gross_amount'))
-        total_tax=Income.objects.filter(employeer_id=empolyer).aggregate(Sum('tax_amount'))
-        total_VAT=Income.objects.filter(employeer_id=empolyer).aggregate(Sum('VAT_amount'))
-        total_pay=Income.objects.filter(employeer_id=empolyer).aggregate(Sum('pay_amount'))
+        incoms=Income.objects.filter(employer_id=empolyer)
+        total_income=Income.objects.filter(employer_id=empolyer).aggregate(Sum('gross_amount'))
+        total_tax=Income.objects.filter(employer_id=empolyer).aggregate(Sum('tax_amount'))
+        total_VAT=Income.objects.filter(employer_id=empolyer).aggregate(Sum('VAT_amount'))
+        total_pay=Income.objects.filter(employer_id=empolyer).aggregate(Sum('pay_amount'))
         view=ViewGenerator(table=Income,entities=incoms,opration_buttons={},
                     select_checkbox=False,add_url='add_income',ordering=ordering)
         context=view.get_context_template()
@@ -189,11 +140,11 @@ def get_employer_payment_view(request,*args,**kwargs):
         context.update(**total_fields)
         context.update(**exclude_fields)
         print(context)
-        return render(request,"employer_payment_list.html",context)
+        return render(request,"income/employer_payment_list.html",context)
     else:
         form=EmployerPyementReport()
     
-    return render(request,"employer_payment_list.html",{'form':form})
+    return render(request,"income/employer_payment_list.html",{'form':form})
 
 def get_contracts_view(request,id,*args,**kwargs):
    contracts=Contract.objects.filter(employer_id=id)
@@ -207,33 +158,10 @@ def get_contracts_view(request,id,*args,**kwargs):
     
 
    view=ViewGenerator(table=Contract,entities=contracts,
-                     opration_buttons={},select_checkbox=False,add_url='add_employeer')
+                     opration_buttons={},select_checkbox=False,add_url='employer-create')
    print(view.get_context_template())
-   return render(request,"list.html",view.get_context_template())  
+   return render(request,"share/list.html",view.get_context_template())  
 
-
-def get_contracts_list_view(request,*args,**kwargs):
-    
-   contracts=Contract.objects.all()
-   for contract in contracts:
-       contract_amount=contract.gross_amount + contract.adjustment_amount
-       incomes=Income.objects.filter(contract=contract)
-       total_income=incomes.aggregate(Sum('gross_amount'))
-       contract.total_payments=total_income['gross_amount__sum']
-       contract.final_amount=contract_amount
-       if contract.total_payments is not None:
-        contract.progress='{0:.3g}'.format(total_income['gross_amount__sum']/contract_amount)
-       else:
-        contract.total_payments=0
-        contract.progress=0
-
-       contract.save()
-    
-
-   view=ViewGenerator(table=Contract,
-                     opration_buttons={},select_checkbox=False,add_url='contracts_add')
-   return render(request,"contracts_list.html",view.get_context_template())  
-    
     
 def get_contract_payments_view(request,*args,**kwargs):
     if request.method=='POST':
@@ -246,7 +174,7 @@ def get_contract_payments_view(request,*args,**kwargs):
         total_VAT=Income.objects.filter(contract_id=contract).aggregate(Sum('VAT_amount'))
         total_pay=Income.objects.filter(contract_id=contract).aggregate(Sum('pay_amount'))
         view=ViewGenerator(table=Income,entities=incoms,opration_buttons={},
-                    select_checkbox=False,add_url='add_income',ordering=ordering)
+                    select_checkbox=False,add_url='income-create',ordering=ordering)
         context=view.get_context_template()
         additon={'form':form}
         total_fields={'total_income':total_income,'total_tax':total_tax,
@@ -255,13 +183,9 @@ def get_contract_payments_view(request,*args,**kwargs):
         context.update(**additon)
         context.update(**total_fields)
         context.update(**exclude_fields)
-        return render(request,"contract_payment_list.html",context)
+        return render(request,"income/contract_payment_list.html",context)
     else:
         form=ContractPymentReport()
     
-    return render(request,"contract_payment_list.html",{'form':form})
+    return render(request,"income/contract_payment_list.html",{'form':form})
 
-def update_employer_view(request,id):
-    if request.method=='POST':
-        employer=Employeer.objects.get(id=id)
-        form=AddEmployeerForm(employer)

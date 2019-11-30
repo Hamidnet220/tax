@@ -1,21 +1,6 @@
 from django import forms
-from .models import Income, Employeer, Bank, Contract, Buy
-
-class AddEmployeerForm(forms.ModelForm):
-    class Meta:
-        model=Employeer
-        fields='__all__'
-
-    def save_record(self):
-        Employeer.objects.create(**self.cleaned_data)
-
-class AddContractForm(forms.ModelForm):
-    class Meta:
-        model=Contract
-        fields='__all__'
-
-    def save_record(self):
-        Contract.objects.create(**self.cleaned_data)
+from .models import *
+from baseinfo.models import *
 
 class IncomeForm(forms.ModelForm):
     class Meta:
@@ -45,7 +30,7 @@ class SeasonReport(forms.Form):
     file_path=forms.FileField(allow_empty_file=True)
 
 class EmployerPyementReport(forms.Form):
-    field=Employeer.objects.all()
+    field=Employer.objects.all()
     employer=forms.ModelChoiceField(queryset=field,widget=forms.Select(attrs={'onchange':'this.form.submit();'}))
 
 class ContractPymentReport(forms.Form):
@@ -53,10 +38,3 @@ class ContractPymentReport(forms.Form):
     contract=forms.ModelChoiceField(queryset=field,widget=forms.Select(attrs={'onchange':'this.form.submit();'}))
      
 
-class BankForm(forms.ModelForm):
-    class Meta:
-        model=Bank
-        fields='__all__'
-    
-    def save_record(self):
-        Bank.objects.create(**self.cleaned_data)

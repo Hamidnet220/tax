@@ -131,11 +131,11 @@
             <a href="javascript:void(0)" class="closebtn" onclick=" closeNav('baseinfo')">&times;</a>
             <div class="overlay-content">
                 <div class="column">
-                    <a href="{% url 'employeers' %}">اطلاعات کارفرمایان</a>
-                    <a href="{% url 'contracts_list' %}">اطلاعات قراردادها</a>
-                    <a href="{% url 'incomes' %}">لیست درآمدها</a>
-                    <a href="{% url 'buys' %}">لیست خریدها</a>
-                    <a href="{% url 'banks' %}">لیست بانک ها</a>
+                    <a href="{% url 'employer-list' %}">اطلاعات کارفرمایان</a>
+                    <a href="{% url 'contract-list' %}">اطلاعات قراردادها</a>
+                    <a href="{% url 'income-list' %}">لیست درآمدها</a>
+                    <a href="{% url 'buy-list' %}">لیست خریدها</a>
+                    <a href="{% url 'bank-list' %}">لیست بانک ها</a>
                     <a href="{% url 'document-list' %}"> اسناد و مدارک</a>
 
                 </div>
@@ -179,8 +179,8 @@
             <a href="javascript:void(0)" class="closebtn" onclick=" closeNav('reportNav')">&times;</a>
             <div class="overlay-content">
                 <a href="{% url 'season_report' %}">گزارش عملکرد فصول</a>
-                <a href="{% url 'employer_payment' %}">گزارش مالی بر اساس کارفرما</a>
-                <a href="{% url 'contract_payments' %}">گزارش مالی بر اساس قرارداد</a>
+                <a href="{% url 'employer-pays' %}">گزارش مالی بر اساس کارفرما</a>
+                <a href="{% url 'contract-pays' %}">گزارش مالی بر اساس قرارداد</a>
                 <a href="{% url 'declaration' %}">اظهارنامه</a>
 
                 <a href="#">چاپ حضور و غیاب ماه جاری</a>

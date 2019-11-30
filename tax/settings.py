@@ -33,7 +33,8 @@ ALLOWED_HOSTS = ['192.168.1.53','localhost','127.0.0.1']
 INSTALLED_APPS = [
     'pages.apps.PagesConfig',
     'income.apps.IncomeConfig',
-    'accountin.apps.AccountingConfig'
+    'accounting.apps.AccountingConfig',
+    'baseinfo.apps.BaseinfoConfig',
     'docmanagment.apps.DocmanagmentConfig',
     'django.contrib.admin',
     'django.contrib.auth',

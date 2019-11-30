@@ -86,22 +86,24 @@
 </head>
 
 <body>
-    {% include "navbar.html" %}
+    {% include "share/navbar.html" %}
     {% load getattribute %}
     {% load l10n %}
-    {% load jformat %}
 
     <div id='page_top'></div>
     <a href="#page_top" id="jump-top" class="fa fa-angle-up fa-4x-up"></a>
     <a href="{% url add_url_name %}" class="button" target="blank">جدید</a>
     <div id='data-list'>
         <table>
+
+            <!-- Add Header Row. -->
             <tr>
                 <!-- if select checkbox is tru you will seel check box in the first of all rows-->
                 {% if select_checkbox %}
-                <th><input type="checkbox">همه</th>
+                    <th><input type="checkbox">همه</th>
                 {% endif %}
-
+                
+                <!-- Add Header row by nams of table fields. -->
                 {% for title in titles %}
                 <th>
                     {{title}}
@@ -110,60 +112,60 @@
 
                 <!-- if opration button is true the you will see opration button in last col -->
                 {% if opration_buttons %}
-                <th>عملیات</th>
+                    <th>عملیات</th>
                 {% endif %}
 
             </tr>
+
             <!-- check if exist any object -->
             {% if objects %}
             <!-- loop through objects for display in html file -->
-            {% for object in objects %}
-            <tr>
-                <!-- if opration button is true the you will see opration button in last col -->
-                {% if select_checkbox %}
-                    <td><input type="checkbox"></td>
-                {% endif %}
-                <td>{{forloop.counter}}</td>
-                
-                {% for field in field_names %}
-                    {% if field == "year" %}<!--check if field is year the disable separator for it-->
-                        {% localize off %}
-                            <td>{{ object|getattribute:field }}</td>
-                        {% endlocalize %}
+                {% for object in objects %}
+                    <tr id={{object.id}}>
+                        <!-- if opration button is true the you will see opration button in last col -->
+                        {% if select_checkbox %}
+                            <td><input type="checkbox"></td>
+                        {% endif %}
 
-                        {% elif field == "date" %}<!--check if field is year the disable separator for it-->
-                        {% localize off %}
-                            <td>{{ object|getattribute:field|jformat:"%Y/%m/%d" }}</td>
-                        {% endlocalize %}
+                        <!-- Add row number for each object. -->
+                        <td>{{forloop.counter}}</td>
+                        
+                        <!-- Add field value. -->
+                        {% for field in field_names %}
+                            
+                            {% if field == "year" %}
+                                {% localize off %}
+                                    <td>{{ object|getattribute:field }}</td>
+                                {% endlocalize %}
+                            {% elif field == "title" %}
+                                 <td><a href="{% url 'contracts' id=object.id %}"> {{ object|getattribute:field }} </a></td>
+                            {% else %}
+                                <td>{{ object|getattribute:field }}</td>
+                            {% endif %}
+                        {% endfor %}
 
-                        {% elif field == "progress" %}
-                                {% if object.progress >= 1  %}
-                                    <td style="background-color: #36f" >{{ object|getattribute:field }}</td>
-                                {% else %}
-                                     <td style="background-color: indianred">{{object.progress}}</td>
-                                {% endif %}   
-                    {% else %}
-                        <td>{{ object|getattribute:field }}</td>
-                    {% endif %}
+                        <!-- Add opration button in last column. -->
+                        {% if opration_buttons %}
+                        <td>
+                            {% for key,values in opration_buttons.items %}
+                            <a class='opration_btn' href="{% url values.1 id=object.id %}" name={{object.id}}
+                                onclick={{key}}>{{values.0}}</a>
+                            {% endfor %}
+                        </td>
+                        {% endif %}
+
+                    </tr>
                 {% endfor %}
-
-                <!-- if opration button is true the you will see opration button in last col -->
-                {% if opration_buttons %}
-                <td>
-                    {% for key,values in opration_buttons.items %}
-                    <a class='opration_btn' href="{% url values.1 id=object.id %}" name={{object.id}}
-                        onclick={{key}}>{{values.0}}</a>
-                    {% endfor %}
-                </td>
-                {% endif %}
-
-            </tr>
-            {% endfor %}
             {% endif %}
         </table>
     </div>
 
+
     <script>
+        $('tr').dblclick(function(){
+            var id = $(this).attr('id');
+            window.popup.question
+        })
 
     </script>
 

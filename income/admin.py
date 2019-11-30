@@ -1,10 +1,5 @@
 from django.contrib import admin
-from .models import *
+from .models import Income, Buy
 
-# Register your models here.
-admin.site.register(Employeer)
 admin.site.register(Income)
-admin.site.register(Bank)
-admin.site.register(Contract)
-admin.site.register(City)
 admin.site.register(Buy)
