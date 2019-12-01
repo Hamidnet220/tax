@@ -138,7 +138,7 @@
                                     <td>{{ object|getattribute:field }}</td>
                                 {% endlocalize %}
                             {% elif field == "title" %}
-                                 <td><a href="{% url 'contracts' id=object.id %}"> {{ object|getattribute:field }} </a></td>
+                                 <td><a href="{{    'contracts id=object.id'    }}"> {{ object|getattribute:field }} </a></td>
                             {% else %}
                                 <td>{{ object|getattribute:field }}</td>
                             {% endif %}

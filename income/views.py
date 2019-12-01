@@ -19,18 +19,37 @@ def get_incomes_view(request,*args,**kwargs):
         income.save()
         
     view=ViewGenerator(table=Income,opration_buttons={},
-                        select_checkbox=False,add_url='income-create',ordering=ordering)
+                        select_checkbox=False,add_url='income:income-create',ordering=ordering)
 
     return render(request,"share/list.html",view.get_context_template())
 
+# Add new income view
+class AddIncomeView(FormView):
+    template_name   =   'share/input_form.html'
+    form_class      =   IncomeForm
+    success_url     =   reverse_lazy('income-list')
+
+    def form_valid(self, form):
+        form.save_record()
+        return super().form_valid(form)
 
 # Buys view 
 def get_buys_view(request,*args,**kwargs):
     ordering=('year','month','day')
     view=ViewGenerator(table=Buy,opration_buttons={},
-                        select_checkbox=False,add_url='buy-create',ordering=ordering)
+                        select_checkbox=False,add_url='income:buy-create',ordering=ordering)
 
     return render(request,"share/list.html",view.get_context_template())
+
+# Add new buy view
+class AddBuyView(FormView):
+    template_name   =   'share/input_form.html'
+    form_class      =   BuyForm
+    success_url     =   reverse_lazy('buy-list')
+
+    def form_valid(self, form):
+        form.save_record()
+        return super().form_valid(form)
 
 #Session Report view
 def get_season_view(request,*args,**kwargs):
@@ -101,23 +120,7 @@ def declaration_view(request,*args,**kwargs):
      
     return render(request,"income/declaration.html",context)
     
-class AddIncomeView(FormView):
-    template_name   =   'share/input_form.html'
-    form_class      =   IncomeForm
-    success_url     =   reverse_lazy('income-list')
 
-    def form_valid(self, form):
-        form.save_record()
-        return super().form_valid(form)
-
-class AddBuyView(FormView):
-    template_name   =   'share/input_form.html'
-    form_class      =   BuyForm
-    success_url     =   reverse_lazy('buy-list')
-
-    def form_valid(self, form):
-        form.save_record()
-        return super().form_valid(form)
 
 def get_employer_payment_view(request,*args,**kwargs):
     if request.method=='POST':

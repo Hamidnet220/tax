@@ -27,12 +27,12 @@ def get_contracts_list_view(request,*args,**kwargs):
     
 
    view=ViewGenerator(table=Contract,
-                     opration_buttons={},select_checkbox=False,add_url='contract-create')
+                     opration_buttons={},select_checkbox=False,add_url='baseinfo:contract-create')
    return render(request,"baseinfo/contracts_list.html",view.get_context_template())  
 
 # Create contract view
 class AddContractView(FormView):
-    template_name   =   'input_form.html'
+    template_name   =   'share/input_form.html'
     form_class      =   AddContractForm
     success_url     =   reverse_lazy('contract-list')
     
@@ -43,7 +43,7 @@ class AddContractView(FormView):
 # Employers list view
 def get_employers_list_view(request,*args,**kwargs):
     view=ViewGenerator(table=Employer,opration_buttons={},select_checkbox=False,
-                        add_url='employer-create')
+                        add_url='baseinfo:employer-create')
     return render(request,"baseinfo/employer_list.html",view.get_context_template())
 
 # Create employer view
@@ -67,7 +67,7 @@ def update_employer_view(request,id):
 def get_banks(request,*args,**kwargs):
     
     view=ViewGenerator(table=Bank,opration_buttons={},
-                        select_checkbox=False,add_url='bank-create')
+                        select_checkbox=False,add_url='baseinfo:bank-create')
 
     return render(request,"share/list.html",view.get_context_template())
 
@@ -75,7 +75,7 @@ def get_banks(request,*args,**kwargs):
 class AddBankView(FormView):
     template_name   =   'share/input_form.html'
     form_class      =   BankForm
-    success_url     =   reverse_lazy('bank-list')
+    success_url     =   reverse_lazy('baseinfo:bank-list')
     
     def form_valid(self, form):
         form.save_record()
