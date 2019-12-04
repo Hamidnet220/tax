@@ -1,42 +1,10 @@
-<!DOCTYPE html>
-<html>
+{% extends "share/base.html" %}
+{% load getattribute %}
+{% load l10n %}
+{% load jformat %}
+{% load humanize %}
 
-<head>
-
-    <link rel="stylesheet" href="js-persian-cal.css">
-    <style>
-        #input-form {
-            margin: 25px;
-            padding: 25px;
-            width: 90%;
-            background-color: rgba(45, 103, 179, 0.9);
-            border-radius: 15px 5px 15px 5px;
-        }
-
-       
-        form input {
-            width: 100%;
-
-        }
-
-        label::after {
-            content: '';
-            display: block;
-        }
-
-        label {
-            color: aliceblue;
-        }
-    </style>
-
-</head>
-
-<body>
-
-    {% include "share/navbar.html" %}
-    {% load getattribute %}
-    {% load humanize %}
-    {% load l10n %}
+{% block content %}
     <div id='form'>
         <form style="padding: 20px;" method="POST" action=".">
             {% csrf_token %}
@@ -45,8 +13,7 @@
     </div>
 
     <div id='data-list'>
-        <table>
-            <caption>لیست عملکرد فصول شرکت آروین کیان سازه</caption>
+        <table class="table table-hover">
             <tr>
                 <!-- if select checkbox is tru you will seel check box in the first of all rows-->
                 {% if select_checkbox %}
@@ -77,7 +44,7 @@
                 <td>{{forloop.counter}}</td>
 
                 {% for field in field_names %}
-                    
+
                     {% if field == "year" %}
                         <!--check if field is year the disable separator for it-->
                         {% localize off %}
@@ -116,6 +83,4 @@
             {% endif %}
         </table>
     </div>
-</body>
-
-</html>
+{% endblock %}
