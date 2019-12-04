@@ -35,6 +35,7 @@
 
     {% include "share/navbar.html" %}
     {% load getattribute %}
+    {% load humanize %}
     {% load l10n %}
     <div id='form'>
         <form style="padding: 20px;" method="POST" action=".">
@@ -105,12 +106,12 @@
 
                 <tr>
                     <td colspan="9" style="background-color: burlywood">Total</td>
-                    <td style="background-color: aquamarine">{{ total_income.gross_amount__sum }}</td>
+                    <td style="background-color: aquamarine">{{ total_income.gross_amount__sum|intcomma }}</td>
                     <td style="border-style:none"></td>
-                    <td style="background-color: aquamarine">{{ total_VAT.VAT_amount__sum }}</td>
+                    <td style="background-color: aquamarine">{{ total_VAT.VAT_amount__sum|intcomma }}</td>
                     <td style="border-style:none"></td>
-                    <td style="background-color: aquamarine">{{ total_tax.tax_amount__sum }}</td>
-                    <td style="background-color: aquamarine">{{ total_pay.pay_amount__sum }}</td>
+                    <td style="background-color: aquamarine">{{ total_tax.tax_amount__sum|intcomma }}</td>
+                    <td style="background-color: aquamarine">{{ total_pay.pay_amount__sum|intcomma }}</td>
                 </tr>
             {% endif %}
         </table>
