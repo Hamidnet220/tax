@@ -3,7 +3,7 @@ from django.urls import reverse_lazy
 from views_generator import ViewGenerator
 from django.db.models import Sum
 from income.models import Income
-from django.views.generic import FormView
+from django.views.generic import FormView,CreateView
 from .froms import *
 from .models import *
 
@@ -80,3 +80,15 @@ class AddBankView(FormView):
     def form_valid(self, form):
         form.save_record()
         return super().form_valid(form)
+
+#Create company vie
+
+class CompanyInfo_View(CreateView):
+    model = CompanyInfo
+    fields_name =   [f.name for f in CompanyInfo._meta.get_fields()]
+    fields_name.remove('id')
+    fields_name.remove('person')
+    fields = fields_name
+    template_name   =   "baseinfo/companyInfo.html"
+
+    

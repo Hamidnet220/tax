@@ -70,7 +70,7 @@ class Buy(models.Model):
     seller_fname=   models.CharField('نام',max_length=50,blank=True)
     seller_lname=   models.CharField('نام خانوادگی',max_length=50,blank=True)
     seller_company= models.CharField('عنوان شرکت',max_length=50,blank=True)
-    economic_id   = models.CharField('شماره اقتصادی',max_length=11)
+    economic_id   = models.CharField('شماره اقتصادی',max_length=12)
     national_code = models.CharField('شماره/شناسه ملی',max_length=11)
     title       =   models.CharField('عنوان خرید',max_length=100,blank=True)
     year        =   models.IntegerField('سال',choices=YEAR_CHOICES)
