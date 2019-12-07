@@ -3,7 +3,7 @@ from django.urls import reverse_lazy
 from views_generator import ViewGenerator
 from django.db.models import Sum
 from income.models import Income
-from django.views.generic import FormView,CreateView
+from django.views.generic import FormView,CreateView,ListView
 from .froms import *
 from .models import *
 
@@ -83,12 +83,15 @@ class AddBankView(FormView):
 
 #Create company vie
 
-class CompanyInfo_View(CreateView):
+class CompanyInfo_View(ListView):
     model = CompanyInfo
-    fields_name =   [f.name for f in CompanyInfo._meta.get_fields()]
-    fields_name.remove('id')
-    fields_name.remove('person')
-    fields = fields_name
     template_name   =   "baseinfo/companyInfo.html"
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context=super().get_context_data(**kwargs)
+        persons=Person.objects.filter(company=1)
+        context['persons']=persons
+        return context
+
 
     

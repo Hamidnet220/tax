@@ -43,7 +43,7 @@ def claculate_tax(incoms):
             income.VAT_amount = round(
                 income.gross_amount * decimal.Decimal(0.09), 0)
         income.save()
-    return true
+    return True
 
 # Buys view
 

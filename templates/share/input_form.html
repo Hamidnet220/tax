@@ -1,43 +1,13 @@
-<!DOCTYPE html>
-<html>
+{% extends "share/base.html" %}
+{% load getattribute %}
+{% load l10n %}
+{% load jformat %}
+{% block content %}
 
-<head>
+<form class="form-group" method="POST">
+    {% csrf_token %}
+    {{form.as_p}}
+    <button type="submit">ذخیره</button>
+</form>
 
-    <link rel="stylesheet" href="js-persian-cal.css">
-     <style>
-        #input-form {
-            margin: 25px;
-            padding: 25px;
-            width: 90%;
-            background-color: rgba(45, 103, 179, 0.9);
-            border-radius: 15px 5px 15px 5px;
-        }
-
-        form input {
-            width: 100%;
-
-        }
-        label::after{
-            content:'';
-            display: block;
-        }
-
-        label {
-            color: aliceblue;
-        }
-    </style>
-
-</head>
-
-<body>
-    {% include "share/navbar.html" %}
-    <div id="input-form">
-        <form method="POST">
-            {% csrf_token %}
-            {{form.as_p}}
-            <button type="submit">ذخیره</button>
-        </form>
-    </div>
-</body>
-
-</html>
+{% endblock %}

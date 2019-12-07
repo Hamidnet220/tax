@@ -134,6 +134,7 @@ class Person(models.Model):
     national_code   =   models.CharField("کد ملی",max_length=10)
     id_number       =   models.CharField("شماره شناسنامه",max_length=10)
     position        =   models.IntegerField("سمت",choices=POSITION)
+    number_of_shares=   models.IntegerField("تعداد سهم",default=0)
     degree          =   models.IntegerField("مدرک تحصیلی",choices=DEGREE)
     work_experience =   models.IntegerField("سابقه کار")
     field_of_study  =   models.IntegerField("",choices=FIELD_OF_STUDY)
