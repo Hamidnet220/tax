@@ -8,9 +8,11 @@ from .forms import *
 from views_generator import ViewGenerator
 from django.forms import modelformset_factory
 import decimal
+from django.contrib.auth.decorators import login_required
 
 
 # Incomes view
+@login_required
 def get_incomes_view(request,*args, **kwargs):
     ordering = ('year', 'month', 'day')
     incomes = Income.objects.all()

@@ -14,4 +14,5 @@ urlpatterns = [
     path('documents/',include('docmanagment.urls')),
     path('baseinfo/',include('baseinfo.urls')),
     path('income/',include('income.urls')),
+    path('accounts/',include('accounts.urls')),
     ]
