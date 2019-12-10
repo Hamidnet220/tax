@@ -13,7 +13,7 @@ def login(request):
         
         if user is not None:
             auth.login(request,user)
-            return redirect('home')
+            return redirect('pages:home')
         else:
             return redirect('accounts:login')
     else:
@@ -23,7 +23,7 @@ def logout(request):
 
     if request.method=='POST':
         auth.logout(request)
-        return redirect(request,'pages/home.html')
+        return render(request,'pages/home.html')
 
 def dashboard(request):
     return(request,'accounts/dashboard.html')
